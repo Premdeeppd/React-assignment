@@ -3,7 +3,7 @@
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/Premdeeppd/Frontend-Assignment.git
+   git clone https://github.com/Premdeeppd/React-assignment.git
    ```
 
 2. Navigate to the project directory:
