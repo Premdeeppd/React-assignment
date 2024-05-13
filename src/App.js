@@ -11,9 +11,9 @@ const apiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 function App() {
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [lng, setLng] = useState(-70.9);
-  const [lat, setLat] = useState(42.35);
-  const [zoom, setZoom] = useState(9);
+  const [lng, setLng] = useState(77.1);
+  const [lat, setLat] = useState(28.7);
+  const [zoom, setZoom] = useState(4);
   const [theme, setTheme] = useState(() => {
     const currentHour = new Date().getHours();
     return currentHour >= 6 && currentHour < 18 ? "light" : "dark";
@@ -54,11 +54,12 @@ function App() {
         layout: {
           "text-field": ["get", "name"],
           "text-size": 10,
+          "text-offset": [0, -1],
         },
         paint: {
           "text-color": "red",
         },
-        filter: ["<=", 8, ["zoom"]],
+        filter: ["<=", 6, ["zoom"]],
       });
 
       map.current.addLayer({
@@ -70,24 +71,19 @@ function App() {
           "circle-color": "blue",
         },
       });
-
-      map.current.on("click", "portLocations", function (e) {
-        if (map.current.getZoom() < 8) {
-          var features = map.current.queryRenderedFeatures(e.point, {
-            layers: ["portLocations"],
-          });
-
-          if (!features.length) {
-            return;
-          }
-
-          var feature = features[0];
-
-          new mapboxgl.Popup({ offset: [0, -15] })
-            .setLngLat(feature.geometry.coordinates)
-            .setHTML("<p>" + feature.properties.name + "</p>")
-            .addTo(map.current);
-        }
+      map.current.addLayer({
+        id: "shipNames",
+        type: "symbol",
+        source: "shipLocations",
+        layout: {
+          "text-field": ["get", "name"],
+          "text-size": 12,
+          "text-offset": [0, -1],
+        },
+        paint: {
+          "text-color": "blue",
+        },
+        filter: ["<=", 6, ["zoom"]],
       });
 
       map.current.on("click", async function (e) {
